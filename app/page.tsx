@@ -5,8 +5,17 @@ export default function Home() {
   return (
     <main>
       <h1>ima three.js master!</h1>
-      <Link href="/pages/box">moving box!</Link>
-      <Link href="/pages/text">fonts loader!</Link>
+      <ul>
+        <li>
+          <Link href="/pages/box">moving box!</Link>
+        </li>
+        <li>
+          <Link href="/pages/text">fonts loader!</Link>
+        </li>
+        <li>
+          <Link href="/pages/scroll">scroll animation!</Link>
+        </li>
+      </ul>
     </main>
   );
 }

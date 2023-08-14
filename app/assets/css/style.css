@@ -1,9 +1,48 @@
 html {
   margin: 0;
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
   height: 100%;
   width: 100%;
+  text-align: center;
+}
+
+ul {
+  display: flex;
+  flex-direction: column;
+}
+
+li {
+  list-style: none;
+}
+
+li + li {
+  margin-top: 24px;
+}
+
+.scrollCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.scrollContent {
+  position: absolute;
+  width: 100vw;
+  height: 200vh;
+  z-index: 100;
+  justify-content: center;
+  text-align: center;
+  font-size: 2rem;
+  margin-top: 100px;
+  color: #fff;
+}
+
+.scrollWrap section {
+  min-height: 100vh;
+  padding: 20px;
+  font-size: 1.5rem;
 }
