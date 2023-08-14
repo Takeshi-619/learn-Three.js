@@ -1,10 +1,14 @@
 "use client";
+
 import React, { useEffect } from "react";
 import * as THREE from "three";
+import { FontLoader } from "three/examples/jsm/loaders/FontLoader.js";
+import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+
 import "../../assets/css/style.css";
 
-function BoxPage() {
+function TextPage() {
   let canvas: HTMLCanvasElement;
   useEffect(() => {
     if (canvas) return;
@@ -26,6 +30,7 @@ function BoxPage() {
     renderer.setSize(sizes.width, sizes.height);
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.shadowMap.enabled = true;
+    renderer.setClearColor(0xf1f1f1);
 
     // カメラ -- 視点 -- //
     const camera = new THREE.PerspectiveCamera(
@@ -34,40 +39,39 @@ function BoxPage() {
       0.1,
       1000
     );
-    camera.position.z = 3;
+    camera.position.z = 30;
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
 
-    // box -- boxの詳細設定 -- //
-    const boxGeometry = new THREE.BoxGeometry(1, 1, 1); //boxの生成
-    const boxEdges = new THREE.EdgesGeometry(boxGeometry); //枠線の生成
-    const boxLineMaterial = new THREE.LineBasicMaterial({ color: 0x0000ff }); //枠線の詳細（ここでは色のみ）
-    const boxFrame = new THREE.LineSegments(boxEdges, boxLineMaterial); //枠線をboxに追加
-    scene.add(boxFrame); //シーンに追加（これで描画される）
-    // 絵文字のテクスチャを読み込む
-    const emojiTexture = new THREE.TextureLoader().load("/logo.png"); // 絵文字の画像ファイルを指定
+    // フォントローダー
+    const boxGeometry = new THREE.BoxGeometry(16, 16, 16);
+    const boxMaterial = new THREE.MeshNormalMaterial();
+    const boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
+    scene.add(boxMesh);
+    const fontLoader = new FontLoader();
+    fontLoader.load("/fonts/cherry_bomb_one_regular.json", (font) => {
+      const textGeometry = new TextGeometry("かわいいねぇ", {
+        font: font,
+        size: 1.2,
+        height: 0.4,
+        curveSegments: 12,
+        bevelEnabled: true,
+        bevelThickness: 0.03,
+        bevelSize: 0.02,
+        bevelOffset: 0,
+        bevelSegments: 5,
+      });
+      textGeometry.center();
 
-    const boxMaterial = new THREE.MeshBasicMaterial({
-      map: emojiTexture,
+      const textMaterial = new THREE.MeshStandardMaterial();
+      const text = new THREE.Mesh(textGeometry, textMaterial);
+      text.castShadow = true;
+      text.position.z = 10;
+      scene.add(text);
     });
-    const box = new THREE.Mesh(boxGeometry, boxMaterial);
-    scene.add(box);
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
-    scene.add(ambientLight);
-
-    const pointLight = new THREE.PointLight(0xffffff, 0.2);
-    pointLight.position.set(0, 300, 200);
-    scene.add(pointLight);
-
-    const clock = new THREE.Clock();
     const tick = () => {
-      const elapsedTime = clock.getElapsedTime();
-      box.rotation.x = elapsedTime;
-      box.rotation.y = elapsedTime;
-      boxFrame.rotation.x = elapsedTime;
-      boxFrame.rotation.y = elapsedTime;
       window.requestAnimationFrame(tick);
       controls.update();
       renderer.render(scene, camera);
@@ -83,8 +87,7 @@ function BoxPage() {
       renderer.setPixelRatio(window.devicePixelRatio);
     });
   }, []);
-
   return <canvas id="canvas"></canvas>;
 }
 
-export default BoxPage;
+export default TextPage;
