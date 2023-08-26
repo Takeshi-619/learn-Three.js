@@ -1,13 +1,12 @@
 "use client";
 import React, { useEffect } from "react";
 import * as THREE from "three";
-import "../../assets/css/style.css";
+import "../assets/css/style.css";
 
-function ScrollPage() {
-  let canvas: HTMLCanvasElement;
+function ScrollAnimation() {
+  const canvas = document.getElementById("canvas") as HTMLCanvasElement;
   useEffect(() => {
     if (canvas) return;
-    canvas = document.getElementById("canvas") as HTMLCanvasElement;
 
     //  scene
     const scene = new THREE.Scene();
@@ -26,6 +25,7 @@ function ScrollPage() {
     renderer.setSize(sizes.width, sizes.height);
     // デバイスの画面サイズに合わせる
     renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setClearColor(0xf1f1f1);
 
     // camera
     const camera = new THREE.PerspectiveCamera(
@@ -166,7 +166,7 @@ function ScrollPage() {
     });
   }, []);
   return (
-    <div className="scrollWrap">
+    <div className="font-loader-scrollWrap">
       <canvas id="canvas" className="scrollCanvas"></canvas>
 
       <span id="scrollProgress"></span>
@@ -198,4 +198,4 @@ function ScrollPage() {
   );
 }
 
-export default ScrollPage;
+export default ScrollAnimation;

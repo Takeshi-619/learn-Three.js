@@ -8,6 +8,7 @@ body {
   height: 100%;
   width: 100%;
   text-align: center;
+  background: #f1f1f1;
 }
 
 ul {
@@ -41,8 +42,14 @@ li + li {
   color: #fff;
 }
 
+.font-loader-scrollWrap section,
 .scrollWrap section {
   min-height: 100vh;
   padding: 20px;
   font-size: 1.5rem;
+}
+
+.font-loader-scrollWrap .scrollContent {
+  color: #161616;
+  margin-top: 80vh;
 }
