@@ -15,6 +15,9 @@ export default function Home() {
         <li>
           <Link href="/pages/scroll">scroll animation!</Link>
         </li>
+        <li>
+          <Link href="/pages/points">points animation!</Link>
+        </li>
       </ul>
     </main>
   );

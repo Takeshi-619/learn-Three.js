@@ -1,60 +1,59 @@
 "use client";
+
 import React, { useEffect } from "react";
 import * as THREE from "three";
-import "../assets/css/style.css";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import "../../assets/css/style.css";
 
-function ScrollAnimation() {
-  const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+function PointsPage() {
+  let canvas: HTMLCanvasElement;
   useEffect(() => {
     if (canvas) return;
+    canvas = document.getElementById("canvas") as HTMLCanvasElement;
 
-    //  scene
     const scene = new THREE.Scene();
 
     const sizes = {
-      width: innerWidth,
-      height: innerHeight,
+      width: window.innerWidth,
+      height: window.innerHeight,
     };
 
-    // renderer
     const renderer = new THREE.WebGLRenderer({
       canvas: canvas,
       antialias: true,
     });
-    // レンダリングした時のサイズ
     renderer.setSize(sizes.width, sizes.height);
-    // デバイスの画面サイズに合わせる
     renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.shadowMap.enabled = true;
     renderer.setClearColor(0xf1f1f1);
 
-    // camera
     const camera = new THREE.PerspectiveCamera(
       75,
-      innerWidth / innerHeight,
+      sizes.width / sizes.height,
       0.1,
       1000
     );
-    // カメラの位置（z：奥行き）
-    camera.position.z = 10;
-    // cameraの設定をsceneに追加
-    scene.add(camera);
+    camera.position.z = 400;
 
-    // girdの生成
-    const gridHleper = new THREE.GridHelper(30, 30);
-    // gridHleperの設定をsceneに追加
-    scene.add(gridHleper);
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.enableZoom = false;
 
-    // boxの生成
-    const boxGeometry = new THREE.BoxGeometry(5, 5, 5, 10);
-    // boxの詳細設定
-    const boxMaterial = new THREE.MeshNormalMaterial();
-    // Meshの生成（ジオメトリ：ここではbox）
-    const boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
-    // boxの角度調整
-    boxMesh.position.set(0, 0.5, -15);
-    boxMesh.rotation.set(1, 1, 0);
-    // boxMeshの設定をsceneに追加
-    scene.add(boxMesh);
+    // Points
+    const radius = 500;
+    const widthSegments = 16;
+    const heightSegments = 24;
+    const pointsGeometry = new THREE.SphereGeometry(
+      radius,
+      widthSegments,
+      heightSegments
+    );
+    const material = new THREE.PointsMaterial({
+      color: "red",
+      size: 12, // in world units
+    });
+    const points = new THREE.Points(pointsGeometry, material);
+    scene.add(points);
 
     // lerp 線形補間:滑らかに動かすもの
     function lerp(x: number, y: number, a: number) {
@@ -79,47 +78,22 @@ function ScrollAnimation() {
       start: 0,
       end: 40,
       function() {
-        camera.lookAt(boxMesh.position);
-        camera.position.set(0, 1, 10);
+        camera.lookAt(points.position);
+        camera.position.set(0, 0, 0);
         //boxMesh.position.set(0, 0.5, "-15");の初期値をlerpに入れる
         // このアニメーションは、0％〜40％の挙動
-        boxMesh.position.z = lerp(-15, 2, scaleParcent(0, 40));
+        points.position.z = lerp(500, 1000, scaleParcent(0, 40));
       },
     });
 
-    // このアニメーションは、40％〜60％の挙動
     animationScripts.push({
       start: 40,
       end: 60,
       function() {
-        camera.lookAt(boxMesh.position);
-        camera.position.set(0, 1, 10);
-        boxMesh.rotation.z = lerp(0, Math.PI, scaleParcent(40, 60));
-      },
-    });
-
-    // このアニメーションは、60％〜80％の挙動
-    animationScripts.push({
-      start: 60,
-      end: 80,
-      function() {
-        camera.lookAt(boxMesh.position);
-        // スクロール毎にカメラの位置が変わる。だんだん変わる。
-        camera.position.x = lerp(0, 10, scaleParcent(60, 80));
-        camera.position.y = lerp(1, 12, scaleParcent(60, 80));
-        camera.position.z = lerp(10, 20, scaleParcent(60, 80));
-      },
-    });
-
-    // このアニメーションは、80％〜101％の挙動
-    animationScripts.push({
-      start: 80,
-      end: 101,
-      function() {
-        camera.lookAt(boxMesh.position);
-        // 自動で動かす
-        boxMesh.rotation.x += 0.02;
-        boxMesh.rotation.y += 0.02;
+        camera.lookAt(points.position);
+        camera.position.z = lerp(1000, 800, scaleParcent(60, 80));
+        camera.position.x = lerp(0, 800, scaleParcent(60, 80));
+        camera.position.y = lerp(0, 1200, scaleParcent(60, 80));
       },
     });
 
@@ -146,16 +120,15 @@ function ScrollAnimation() {
       console.log(scrollPercent); //0~100%で取得
     };
 
-    // animation用レンダリング関数
-    const animate = () => {
-      window.requestAnimationFrame(animate);
+    const tick = () => {
+      window.requestAnimationFrame(tick);
+      points.rotation.y += 0.01;
+      controls.update();
       playScollAnimation();
       renderer.render(scene, camera);
     };
+    tick();
 
-    animate();
-
-    // 画面サイズに合わせて描画
     window.addEventListener("resize", () => {
       sizes.width = window.innerWidth;
       sizes.height = window.innerHeight;
@@ -166,7 +139,7 @@ function ScrollAnimation() {
     });
   }, []);
   return (
-    <div className="font-loader-scrollWrap">
+    <div className="points-scrollWrap">
       <canvas id="canvas" className="scrollCanvas"></canvas>
 
       <span id="scrollProgress"></span>
@@ -198,4 +171,4 @@ function ScrollAnimation() {
   );
 }
 
-export default ScrollAnimation;
+export default PointsPage;

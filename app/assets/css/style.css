@@ -23,7 +23,7 @@ li {
 li + li {
   margin-top: 24px;
 }
-
+.points-scrollWrap .scrollCanvas,
 .scrollCanvas {
   position: fixed;
   top: 0;
@@ -42,14 +42,20 @@ li + li {
   color: #fff;
 }
 
-.font-loader-scrollWrap section,
+.points-scrollWrap section,
 .scrollWrap section {
   min-height: 100vh;
   padding: 20px;
   font-size: 1.5rem;
 }
 
-.font-loader-scrollWrap .scrollContent {
+.points-scrollWrap .scrollContent {
+  position: absolute;
+  width: 100vw;
+  height: 200vh;
+  z-index: 100;
+  justify-content: center;
+  text-align: center;
   color: #161616;
   margin-top: 80vh;
 }
