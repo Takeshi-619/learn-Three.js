@@ -82,7 +82,8 @@ function PointsPage() {
         camera.position.set(0, 0, 0);
         //boxMesh.position.set(0, 0.5, "-15");の初期値をlerpに入れる
         // このアニメーションは、0％〜40％の挙動
-        points.position.z = lerp(500, 1000, scaleParcent(0, 40));
+        camera.position.z = lerp(400, 800, scaleParcent(0, 40));
+        camera.position.x = lerp(0, 800, scaleParcent(0, 40));
       },
     });
 
@@ -91,9 +92,33 @@ function PointsPage() {
       end: 60,
       function() {
         camera.lookAt(points.position);
-        camera.position.z = lerp(1000, 800, scaleParcent(60, 80));
-        camera.position.x = lerp(0, 800, scaleParcent(60, 80));
-        camera.position.y = lerp(0, 1200, scaleParcent(60, 80));
+        camera.position.z = lerp(800, 550, scaleParcent(40, 60));
+        camera.position.x = lerp(800, 800, scaleParcent(40, 60));
+        // camera.position.y = lerp(0, 200, scaleParcent(40, 60));
+      },
+    });
+
+    animationScripts.push({
+      start: 60,
+      end: 80,
+      function() {
+        camera.lookAt(points.position);
+        camera.position.z = lerp(550, 800, scaleParcent(60, 80));
+        camera.position.x = lerp(800, -1200, scaleParcent(60, 80));
+        camera.position.y = lerp(0, 100, scaleParcent(60, 80));
+      },
+    });
+
+    animationScripts.push({
+      start: 80,
+      end: 101,
+      function() {
+        camera.lookAt(points.position);
+        camera.position.z = lerp(1000, 1000, scaleParcent(80, 101));
+        camera.position.x = lerp(800, 100, scaleParcent(80, 101));
+        camera.position.y = lerp(1200, 100, scaleParcent(80, 101));
+        points.rotation.y += 0.01;
+        points.rotation.z += 0.001;
       },
     });
 
@@ -114,15 +139,14 @@ function PointsPage() {
           (document.documentElement.scrollHeight -
             document.documentElement.clientHeight)) *
         100;
-      console.log(document.documentElement.scrollTop); //一番上からの距離
-      console.log(document.documentElement.scrollHeight); //5029
-      console.log(document.documentElement.clientHeight); //927
+      // console.log(document.documentElement.scrollTop); //一番上からの距離
+      // console.log(document.documentElement.scrollHeight); //5029
+      // console.log(document.documentElement.clientHeight); //927
       console.log(scrollPercent); //0~100%で取得
     };
 
     const tick = () => {
       window.requestAnimationFrame(tick);
-      points.rotation.y += 0.01;
       controls.update();
       playScollAnimation();
       renderer.render(scene, camera);
