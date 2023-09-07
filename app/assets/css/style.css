@@ -1,14 +1,24 @@
-html {
+* {
+  box-sizing: border-box;
+  padding: 0;
   margin: 0;
+}
+
+html {
   scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
-  height: 100%;
-  width: 100%;
-  text-align: center;
+  padding: 0;
   background: #f1f1f1;
+  text-align: center;
+  width: 100svw;
+  height: 100svh;
+}
+
+body::-webkit-scrollbar {
+  display: none;
 }
 
 ul {

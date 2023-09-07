@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
 import * as THREE from "three";
-import "../../assets/css/style.css";
 
 function ScrollPage() {
   let canvas: HTMLCanvasElement;

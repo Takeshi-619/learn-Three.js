@@ -18,6 +18,9 @@ export default function Home() {
         <li>
           <Link href="/pages/points">points animation!</Link>
         </li>
+        <li>
+          <Link href="/pages/earth">the earth!</Link>
+        </li>
       </ul>
     </main>
   );
